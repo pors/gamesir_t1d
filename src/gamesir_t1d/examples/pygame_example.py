@@ -2,10 +2,10 @@
 
 import pygame
 import time
-from gamesir_t1d import GameSirT1dPygame  # Import from package, not from module
+from gamesir_t1d import GameSirT1dPygame
 
 
-def main(controller_name):
+def run(controller_name):
     """Initialize pygame and controller, then visualize controller input."""
     # Initialize pygame for window and graphics
     pygame.init()
@@ -104,9 +104,9 @@ def test_without_pygame(controller_name):
 
 
 if __name__ == "__main__":
-    controller_name = "Gamesir-T1d-39BD"  # Change this to match your controller
+    controller_name = "Gamesir-T1d-XXXX"  # Change this to match your controller
     
     # Choose which test to run:
     # Uncomment the test you want to run:
-    main(controller_name)        # Run the pygame visualization
+    run(controller_name)        # Run the pygame visualization
     # test_without_pygame(controller_name)  # Run without pygame

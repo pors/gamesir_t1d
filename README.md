@@ -80,36 +80,11 @@ The package includes an example Pygame application that demonstrates how to use 
 ```python
 # Assuming you've installed the package with the [examples] extra
 # pip install gamesir-t1d[examples]
-from gamesir_t1d.examples import run_example
+from gamesir_t1d.examples import run
 
 # Run the demo
-run_example("Gamesir-T1d-XXXX")  # Replace XXXX with your controller ID
+run("Gamesir-T1d-XXXX")  # Replace XXXX with your controller ID
 ```
-
-Or you can run the example script directly:
-
-```bash
-python -m examples.pygame_example
-```
-
-## Button Mapping
-
-- Axis 0: Left stick X (-1.0 to 1.0)
-- Axis 1: Left stick Y (-1.0 to 1.0)
-- Axis 2: Right stick X (-1.0 to 1.0)
-- Axis 3: Right stick Y (-1.0 to 1.0)
-- Button 0: A button
-- Button 1: B button
-- Button 2: X button
-- Button 3: Y button
-- Button 4: L1 button
-- Button 5: R1 button
-- Button 6: L2 button (digital)
-- Button 7: R2 button (digital)
-- Button 8: C1 button
-- Button 9: C2 button
-- Button 10: Menu button
-- Hat 0: D-pad (returns a tuple of (x, y) where each can be -1, 0, or 1)
 
 ## License
 
