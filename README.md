@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/9b71a95f-e17d-4606-841e-fb90a1f603aa" alt="GameSir T1d Pygame Wrapper" width="300" />
+</p>
+
 # GameSir T1d Pygame Wrapper
 
 A Python package that provides a Pygame-compatible interface for the GameSir T1d controller, making it easy to use in Pygame applications. This package handles BLE connections, reconnections, and provides a convenient API.
