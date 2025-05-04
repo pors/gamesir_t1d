@@ -24,7 +24,7 @@ examples = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/pors/gamesir-t1d"
+Homepage = "https://github.com/pors/gamesir-t1d"
 "Bug Tracker" = "https://github.com/pors/gamesir-t1d/issues"
 
 [project.scripts]

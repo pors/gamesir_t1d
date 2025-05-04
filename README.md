@@ -20,7 +20,7 @@ pip install gamesir-t1d
 Or with uv:
 
 ```bash
-uv pip install gamesir-t1d
+uv add gamesir-t1d
 ```
 
 ## Finding Your Controller Name
