@@ -1,6 +1,6 @@
 [project]
 name = "gamesir-t1d"
-version = "0.1.0"
+version = "0.1.1"
 description = "Python interface for GameSir T1d controller with pygame compatibility"
 readme = "README.md"
 authors = [
@@ -9,6 +9,7 @@ authors = [
 requires-python = ">=3.9"
 dependencies = [
     "bleak>=0.22.3",
+    "pygame>=2.6.1",
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
@@ -16,11 +17,6 @@ classifiers = [
     "Operating System :: OS Independent",
     "Topic :: Software Development :: Libraries",
     "Topic :: Games/Entertainment",
-]
-
-[project.optional-dependencies]
-examples = [
-    "pygame>=2.0.0",
 ]
 
 [project.urls]
