@@ -1,6 +1,6 @@
 [project]
 name = "gamesir-t1d"
-version = "0.1.1"
+version = "0.1.2"
 description = "Python interface for GameSir T1d controller with pygame compatibility"
 readme = "README.md"
 authors = [

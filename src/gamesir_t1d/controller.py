@@ -118,15 +118,13 @@ class GameSirT1dPygame:
         self._reconnect_delay = 2.0  # seconds between reconnection attempts
 
         # Connection status tracking
-        self._connection_state = (
-            "disconnected"  # "disconnected", "connecting", "connected"
-        )
-        self._last_connect_attempt = 0
+        self._connection_state = "disconnected"  # "disconnected", "connecting", "connected"
         self._connect_attempts = 0
 
         # Controller state
-        self._axes = [0.0] * 4  # LX, LY, RX, RY
-        self._buttons = [0] * 12  # All buttons
+        self._axes = [0.0] * 4   # LX, LY, RX, RY
+        # 11 usable buttons (12th is pairing, not usable via pygame)
+        self._buttons = [0] * 11
         self._hat = (0, 0)  # D-pad
 
         # Underlying controller instance
@@ -161,8 +159,10 @@ class GameSirT1dPygame:
         except Exception as e:
             print(f"BLE thread error: {e}")
         finally:
+            # Mark as not running and reset connection/initialization state
             self._running = False
             self._connection_state = "disconnected"
+            self._initialized = False
 
     async def _ble_task(self):
         """Asynchronous task to handle BLE communication with reconnection logic."""
@@ -268,10 +268,11 @@ class GameSirT1dPygame:
             hat_x = -1
         elif self._controller.dpad_right:
             hat_x = 1
+        # Pygame uses +1 for up, -1 for down
         if self._controller.dpad_up:
-            hat_y = -1
-        elif self._controller.dpad_down:
             hat_y = 1
+        elif self._controller.dpad_down:
+            hat_y = -1
         self._hat = (hat_x, hat_y)
 
     # Status methods for connection state

@@ -18,6 +18,8 @@ def run(controller_name):
     print("Connecting to controller...")
     if not controller.init():
         print("Failed to connect to controller")
+        # Clean up pygame on early exit
+        pygame.quit()
         return
 
     running = True
