@@ -1,4 +1,4 @@
-"""GameSir T1d controller wrapper with pygame compatibility."""
+"""GameSir T1d controller wrapper with pygame compatibility using notifications."""
 
 import threading
 import asyncio
@@ -8,6 +8,8 @@ from bleak import BleakClient, BleakScanner
 # The characteristic we want to read. This is the same for all GameSir T1d controllers.
 # The UUID is a standard Bluetooth GATT characteristic for HID devices.
 CHARACTERISTIC_UUID = "00008651-0000-1000-8000-00805f9b34fb"
+# HID report ID for the main joystick/button input report
+INPUT_REPORT_ID = 0xA1
 
 class GameSirT1d:
     """Raw GameSir T1d controller interface."""
@@ -118,11 +120,13 @@ class GameSirT1dPygame:
         self._reconnect_delay = 2.0  # seconds between reconnection attempts
 
         # Connection status tracking
-        self._connection_state = "disconnected"  # "disconnected", "connecting", "connected"
+        self._connection_state = (
+            "disconnected"  # "disconnected", "connecting", "connected"
+        )
         self._connect_attempts = 0
 
         # Controller state
-        self._axes = [0.0] * 4   # LX, LY, RX, RY
+        self._axes = [0.0] * 4  # LX, LY, RX, RY
         # 11 usable buttons (12th is pairing, not usable via pygame)
         self._buttons = [0] * 11
         self._hat = (0, 0)  # D-pad
@@ -204,26 +208,32 @@ class GameSirT1dPygame:
                             0  # Reset attempt counter on successful connection
                         )
 
-                        # Main polling loop
+                        # Set up the notification handler
+                        await client.start_notify(
+                            CHARACTERISTIC_UUID, self._notification_handler
+                        )
+                        print("Notifications started")
+
+                        # Keep connection alive until disconnected or stopped
                         while self._running and self._connection_state == "connected":
                             try:
-                                # Read controller state
-                                data = await client.read_gatt_char(CHARACTERISTIC_UUID)
-
-                                # Parse data
-                                if self._controller.parse_data(data):
-                                    # Update our state
-                                    self._update_state()
-
-                                # Poll at a reasonable rate (20Hz)
-                                await asyncio.sleep(0.05)
+                                # Just sleep to keep the connection alive
+                                # The notification handler will process incoming data
+                                await asyncio.sleep(1.0)
                             except Exception as e:
-                                print(f"Error reading controller: {e}")
+                                print(f"Connection error: {e}")
                                 print(
                                     "Connection may have been lost. Attempting to reconnect..."
                                 )
                                 self._connection_state = "disconnected"
                                 break
+
+                        # Stop notifications before disconnecting
+                        try:
+                            await client.stop_notify(CHARACTERISTIC_UUID)
+                            print("Notifications stopped")
+                        except Exception as e:
+                            print(f"Error stopping notifications: {e}")
 
                 # If we exit the connection block, wait before trying to reconnect
                 await asyncio.sleep(self._reconnect_delay)
@@ -233,6 +243,21 @@ class GameSirT1dPygame:
                 print("Will try to reconnect...")
                 self._connection_state = "disconnected"
                 await asyncio.sleep(self._reconnect_delay)
+
+    def _notification_handler(self, sender, data):
+        """Handler for BLE notifications from the controller."""
+        if not data:
+            return
+
+        # Filter out irrelevant packets by checking the report ID
+        report_id = data[0]
+        if report_id != INPUT_REPORT_ID:
+            return
+
+        # Parse the data
+        if self._controller.parse_data(data):
+            # Update pygame-compatible state
+            self._update_state()
 
     def _update_state(self):
         """Update the pygame-compatible state from the controller data."""

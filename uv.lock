@@ -102,15 +102,10 @@ wheels = [
 
 [[package]]
 name = "gamesir-t1d"
-version = "0.1.0"
+version = "0.1.3"
 source = { editable = "." }
 dependencies = [
     { name = "bleak" },
-    { name = "pygame" },
-]
-
-[package.optional-dependencies]
-examples = [
     { name = "pygame" },
 ]
 
@@ -118,9 +113,7 @@ examples = [
 requires-dist = [
     { name = "bleak", specifier = ">=0.22.3" },
     { name = "pygame", specifier = ">=2.6.1" },
-    { name = "pygame", marker = "extra == 'examples'", specifier = ">=2.0.0" },
 ]
-provides-extras = ["examples"]
 
 [[package]]
 name = "pygame"
